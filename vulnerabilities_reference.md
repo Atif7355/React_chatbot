@@ -1,10 +1,13 @@
-# Vulnerability Reference Document
+# Vulnerability Analysis Report for AI Repository
 
-This document lists the security issues injected into the dummy repository for scanner testing.
+This document maps out the security vulnerabilities embedded within this dummy repository for testing static analysis tools (SonarQube, Fortify) and AI red-teaming agents.
 
-| File Path | Line Number(s) | Vulnerability Type | Severity | Description |
-| :--- | :--- | :--- | :--- | :--- |
-| `app.py` | Line 10–15 | Prompt Injection | Critical | Unsafely concatenates untrusted user inputs directly into the instruction context when `ALLOW_SYSTEM_OVERRIDE` is enabled. |
-| `app.py` | Line 17–25 | Excessive Agency | Critical | Automatically runs shell commands via `subprocess.check_output` based on model output without human-in-the-loop verification. |
-| `app.py` | Line 37–39 | Information Disclosure | Low | Exposes sensitive mock API keys to console/debug outputs when debug mode is toggled. |
-| `config.py` | Line 4–5 | Security Misconfiguration | Medium | Insecure default flags (`ALLOW_SYSTEM_OVERRIDE = True`, `AUTO_EXECUTE_TOOLS = True`) left enabled. |
+| File Name | Line Number | Vulnerability Category | Severity | Description | Detection Tool / Agent |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `app.py` | Line 10 | Hardcoded Credentials | Low | Hardcoded API token string exposed directly in source code. | SonarQube / Fortify |
+| `app.py` | Line 17 | Prompt Injection / Jailbreak | High | User prompt directly concatenated into the system context without sanitization. | AI Red Teaming Agents |
+| `app.py` | Line 25 | Cost / DoS (Resource Exhaustion) | Medium | Unbounded `max_tokens` configuration allows resource drain attacks. | SonarQube / Red Team |
+| `agent_tools.py`| Line 8 | Excessive Agency | High | Agent executes destructive commands automatically based on string matching without human confirmation. | AI Red Teaming Agents / Fortify |
+| `agent_tools.py`| Line 17 | Data Exfiltration / Data Theft | High | Environment variables and internal data structures are exfiltrated to an external URL. | SonarQube / Fortify |
+| `config.py` | Line 4 | Security Misconfiguration | Low | Global `DEBUG_MODE` and unsafe settings enabled by default. | SonarQube |
+
