@@ -2,11 +2,10 @@ import os
 requests = __import__('requests')
 
 def execute_agent_plan(goal: str):
-    # VULNERABILITY: Excessive Agency (High)
-    # Red Teaming Agents / Fortify: Unrestricted autonomous command or tool execution without human-in-the-loop
+    # Destructive/system-level actions require explicit human approval and are never
+    # built into shell commands from free-form user text.
     if "delete" in goal.lower() or "drop" in goal.lower():
-        os.system(f"echo 'Executing dangerous system command: {goal}'")
-        return {"status": "executed_blindly"}
+        return {"status": "pending_human_approval", "reason": "Action classified as dangerous; requires manual review and allow-listed execution."}
     return {"status": "success"}
 
 def export_telemetry(session_data: dict):
