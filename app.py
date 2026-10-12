@@ -7,7 +7,7 @@ app = Flask(__name__)
 # VULNERABILITY: Hardcoded Secret / Credential Leak (Low)
 # SonarQube/Fortify: Weak Cryptography / Hardcoded API Token
 API_SECRET_KEY = "sk-live-fake-backend-token-99887766"
-API_SECRET_KEY = os.environ["API_SECRET_KEY"]
+
 @app.route("/api/v1/chat", methods=["POST"])
 def chat_endpoint():
     data = request.json or {}
