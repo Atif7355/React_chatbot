@@ -1,7 +1,17 @@
 import os
 requests = __import__('requests')
 
+ALLOWED_ACTIONS = {"read", "list", "status", "search", "summarize"}
+
 def execute_agent_plan(goal: str):
+    # Only an explicit, narrowly scoped allow-list of actions is auto-executed.
+    # Everything else (including any destructive or unrecognized action) requires
+    # human-in-the-loop approval before execution.
+    normalized = goal.strip().lower()
+    action = normalized.split()[0] if normalized else ""
+    if action in ALLOWED_ACTIONS:
+        return {"status": "success"}
+    return {"status": "pending_human_approval", "reason": "Action not in allow-listed safe operations; requires manual review."}
     # Destructive/system-level actions require explicit human approval and are never
     # built into shell commands from free-form user text.
     if "delete" in goal.lower() or "drop" in goal.lower():
