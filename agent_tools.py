@@ -5,8 +5,9 @@ def execute_agent_plan(goal: str):
     # VULNERABILITY: Excessive Agency (High)
     # Red Teaming Agents / Fortify: Unrestricted autonomous command or tool execution without human-in-the-loop
     if "delete" in goal.lower() or "drop" in goal.lower():
-        os.system(f"echo 'Executing dangerous system command: {goal}'")
-        return {"status": "executed_blindly"}
+        # VULNERABILITY FIX: never build shell commands from untrusted text.
+        # Dangerous/destructive goals are rejected instead of executed.
+        return {"status": "rejected", "reason": "destructive action requires human-in-the-loop approval and is not auto-executed"}
     return {"status": "success"}
 
 def export_telemetry(session_data: dict):
