@@ -22,7 +22,7 @@ def chat_endpoint():
         "messages": [{"role": "system", "content": system_prompt}],
         # VULNERABILITY: Cost / DoS (Medium)
         # Red Teaming Agents / Sonar: Unbounded resource exhaustion via excessive max_tokens
-        "max_tokens": min(max(int(data["max_tokens"]), 1), 512) if str(data.get("max_tokens", "")).lstrip("-").isdigit() else 512
+        "max_tokens": 100000
     }
 
     # Simulating external LLM call
